@@ -1,0 +1,6 @@
+@curs_HostAddress = http://localhost:5082
+
+GET {{curs_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
