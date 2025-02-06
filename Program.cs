@@ -289,7 +289,7 @@ app.MapDelete("/text/{id}", [Authorize] (int id, HttpContext context) =>
     return Results.Ok(new { message = "Text resource deleted successfully." });
 });
 
-app.MapPost("/texts", [Authorize] (HttpContext context) =>
+app.MapGet("/texts", [Authorize] (HttpContext context) => 
 {
     var userEmail = context.User.Identity.Name;
 
@@ -347,15 +347,17 @@ public static class AtbashCipher
 
     public static string Encrypt(string text)
     {
-        return new string(text.Select(c => _atbashMap.ContainsKey(c) ? _atbashMap[c] : c).ToArray());
+        return new string(
+            text.Select(c => _atbashMap.TryGetValue(c, out var mapped) ? mapped : c)
+                .ToArray()
+        );
     }
 
     public static string Decrypt(string text)
     {
-        return Encrypt(text); 
+        return Encrypt(text); // Atbash - симметричный шифр
     }
 }
-
 // Класс для запроса текста
 public class TextRequest
 {
